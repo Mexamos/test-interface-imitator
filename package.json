@@ -1,0 +1,25 @@
+{
+  "name": "test-interface-imitator",
+  "version": "1.0.0",
+  "description": "Light Application for test using web-pages interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mexamos/test-interface-imitator.git"
+  },
+  "keywords": [
+    "interface_imitation"
+  ],
+  "author": "Mexamos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mexamos/test-interface-imitator/issues"
+  },
+  "homepage": "https://github.com/Mexamos/test-interface-imitator#readme",
+  "dependencies": {
+    "@ulivz/get-event-listeners": "0.0.1"
+  }
+}
