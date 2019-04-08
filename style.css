@@ -1,9 +1,9 @@
 #test-interface-imitator-wrapeer {
     width: 280px;
-    height: 250px;
+    height: 230px;
     position: fixed;
     top: 30px;
-    padding: 5px;
+    padding: 10px;
     border-radius: 1px;
     background: linear-gradient(45deg, #0d0d0d, 30%, #484848);
     box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.5);
@@ -15,10 +15,10 @@
     display: block;
 }
 .tii-left-position {
-
+    left: 30px;
 }
 .tii-right-position {
-
+    right: 30px;
 }
 
 
@@ -49,7 +49,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    height: 200px;
+    height: 160px;
 }
 
 .tii-timers-wrapper {
@@ -71,4 +71,10 @@
 }
 .tii-total-duration-input-wrapper input {
     width: 100px;
+}
+
+.tii-button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
