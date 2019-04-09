@@ -63,14 +63,21 @@
 
 }
 .tii-interval-input-wrapper input {
-    width: 100px;
+    width: 60px;
+    float: left;
 }
 
 .tii-total-duration-input-wrapper {
 
 }
 .tii-total-duration-input-wrapper input {
-    width: 100px;
+    width: 60px;
+    float: left;
+}
+.tii-format-time {
+    margin-top: 6px;
+    margin-left: 3px;
+    display: inline-block;
 }
 
 .tii-button-wrapper {
