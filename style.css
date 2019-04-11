@@ -1,6 +1,6 @@
 #test-interface-imitator-wrapeer {
     width: 280px;
-    height: 230px;
+    height: 260px;
     position: fixed;
     top: 30px;
     padding: 10px;
@@ -44,12 +44,22 @@
 }
 
 
+
+
 .tii-body-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    height: 160px;
+    height: 200px;
+}
+
+.tii-body-wrapper input {
+    width: 250px;
+}
+
+.tii-body-wrapper > div:not(.tii-timers-wrapper) label {
+    text-align: center;
 }
 
 .tii-timers-wrapper {
