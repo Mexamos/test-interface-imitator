@@ -3,10 +3,12 @@ class TestInterfaceImitator {
     constructor() {
         this.include_elements = ''
         this.exclude_elements = ''
+        this.exclude_blocks = ''
         this.interval_timer = null
         this.interval = 0
         this.total_duration = 0
-        this.inner_element_listners = null
+        this.inner_element_listners = [],
+        this.actually_input = null
     }
 
     init() {
@@ -25,6 +27,7 @@ class TestInterfaceImitator {
         this.image_toggle_position_wrapper = document.createElement('div')
         this.image_toggle_position_wrapper.classList.add('tii-img-toggle-position-wrapper')
         this.image_toggle_position_wrapper.appendChild(img_toggle_position)
+        this.inner_element_listners.push(this.image_toggle_position_wrapper)
 
         let header_wrapper = document.createElement('div')
         header_wrapper.classList.add('tii-header')
@@ -48,6 +51,7 @@ class TestInterfaceImitator {
         this.include_input.name = this.include_input.id = 'tii-include-elements'
         this.include_input.placeholder = 'Enter selectors'
         include_input_wrapper.appendChild(this.include_input)
+        this.inner_element_listners.push(this.include_input)
 
         // create exclude elements input
         let exclude_input_wrapper = document.createElement('div')
@@ -61,6 +65,7 @@ class TestInterfaceImitator {
         this.exclude_input.name = this.exclude_input.id = 'tii-exclude-elements'
         this.exclude_input.placeholder = 'Enter selectors'
         exclude_input_wrapper.appendChild(this.exclude_input)
+        this.inner_element_listners.push(this.exclude_input)
 
         // create exclude blocks input
         let exclude_blocks_input_wrapper = document.createElement('div')
@@ -68,12 +73,13 @@ class TestInterfaceImitator {
         body_wrapper.appendChild(exclude_blocks_input_wrapper)
         let exclude_blocks_label = document.createElement('label')
         exclude_blocks_label.for = 'tii-exclude-blocks'
-        exclude_blocks_label.innerHTML = 'Exclude blocks'
+        exclude_blocks_label.innerHTML = 'Exclude element and all children'
         exclude_blocks_input_wrapper.appendChild(exclude_blocks_label)
         this.exclude_blocks_input = document.createElement('input')
         this.exclude_blocks_input.name = this.exclude_blocks_input.id = 'tii-exclude-blocks'
         this.exclude_blocks_input.placeholder = 'Enter selectors'
         exclude_blocks_input_wrapper.appendChild(this.exclude_blocks_input)
+        this.inner_element_listners.push(this.exclude_blocks_input)
 
         // create timers wrapper
         let timers_wrapper = document.createElement('div')
@@ -91,7 +97,9 @@ class TestInterfaceImitator {
         this.interval_input = document.createElement('input')
         this.interval_input.name = this.interval_input.id = 'tii-interval-input'
         this.interval_input.type = 'number'
+        this.interval_input.step = '100'
         interval_input_wrapper.appendChild(this.interval_input)
+        this.inner_element_listners.push(this.interval_input)
         
         let format_interval = document.createElement('div')
         format_interval.classList.add('tii-format-time')
@@ -109,7 +117,9 @@ class TestInterfaceImitator {
         this.total_duration_input = document.createElement('input')
         this.total_duration_input.name = this.total_duration_input.id = 'tii-total-duration-input'
         this.total_duration_input.type = 'number'
+        this.total_duration_input.step = '100'
         total_duration_input_wrapper.appendChild(this.total_duration_input)
+        this.inner_element_listners.push(this.total_duration_input)
 
         let format_duration = document.createElement('div')
         format_duration.classList.add('tii-format-time')
@@ -124,6 +134,7 @@ class TestInterfaceImitator {
         this.button_start.classList.add('tii-button')
         this.button_start.innerHTML = 'Start test'
         button_wrapper.appendChild(this.button_start)
+        this.inner_element_listners.push(this.button_start)
 
         let style_tag = document.createElement('link')
         style_tag.href = 'style.css'
@@ -147,9 +158,23 @@ class TestInterfaceImitator {
         this.include_input.addEventListener('input', function(event) {
             this.include_elements = event.target.value
         }.bind(this))
+        this.include_input.addEventListener('focus', function(event) {
+            console.log(event.target)
+            this.actually_input = event.target
+        }.bind(this))
 
         this.exclude_input.addEventListener('input', function(event) {
             this.exclude_elements = event.target.value
+        }.bind(this))
+        this.exclude_input.addEventListener('focus', function(event) {
+            this.actually_input = event.target
+        }.bind(this))
+
+        this.exclude_blocks_input.addEventListener('input', function(event) {
+            this.exclude_blocks = event.target.value
+        }.bind(this))
+        this.exclude_blocks_input.addEventListener('focus', function(event) {
+            this.actually_input = event.target
         }.bind(this))
 
         this.interval_input.addEventListener('input', function(event) {
@@ -167,6 +192,7 @@ class TestInterfaceImitator {
     initTest() {
         let includes = this.include_elements.split(',')
         let excludes = this.exclude_elements.split(',')
+        let excludes_blocks = this.exclude_blocks.split(',')
 
         this.selected_listners = this.allEventListners.filter(function(listner) {
 
@@ -194,9 +220,22 @@ class TestInterfaceImitator {
                 }
             }.bind(this))
 
-            // let listner_exclude_block = 
+            let listner_exclude_block = excludes_blocks.some(function(selector) {
+                if(selector.length === 0) return false
+                try {
+                    if(listner.target.closest(selector)) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+                catch(error) {
+                    console.log('error', error)
+                }
+            }.bind(this))
 
-            if(listner_include && !listner_exclude) {
+            if(listner_include && !listner_exclude && !listner_exclude_block) {
                 return listner
             }
         }.bind(this))
@@ -223,9 +262,69 @@ class TestInterfaceImitator {
 
 }
 
-let example = new TestInterfaceImitator()
-example.init()
-example.addListners()
-example.allEventListners = window.getAllEventListeners()
+window.onload = function() {
 
-console.log('example', example)
+    let tii = new TestInterfaceImitator()
+    tii.init()
+    tii.addListners()
+    tii.allEventListners = window.getAllEventListeners().filter(function(listner) {
+        let exist_inner_element = tii.inner_element_listners.includes(listner.target)
+        if(!exist_inner_element) {
+
+            console.log('tii.include_input.value', tii.include_input.value)
+
+            if(tii.include_input.value.length === 0) {
+                if(listner.target.id.length > 0) {
+                    tii.include_input.value += `#${listner.target.id}`
+                }
+                else if(listner.target.classList.length > 0) {
+                    listner.target.classList.forEach(function(class_name) {
+                        tii.include_input.value += `.${class_name}`
+                    })
+                }
+            }
+            else {
+                if(listner.target.id.length > 0) {
+                    tii.include_input.value += `, #${listner.target.id}`
+                }
+                else if(listner.target.classList.length > 0) {
+                    listner.target.classList.forEach(function(class_name, index) {
+                        if(index === 0) tii.include_input.value += `, .${class_name}`
+                        else tii.include_input.value += `.${class_name}`
+                    })
+                }
+            }
+
+            return true
+        }
+        else false
+    })
+
+    tii.allEventListners.forEach(function(listner) {
+        listner.target.classList.add('tii-element-with-listner')
+        listner.target.addEventListener('contextmenu', function(event) {
+            event.preventDefault()
+            console.log('event', event)
+            if(event.ctrlKey && tii.actually_input) {
+                event.stopPropagation()
+                // console.log(tii.include_input.focus())
+                console.log('this.actually_input', tii.actually_input.value)
+
+                console.log('listner', listner.target.classList)
+
+                if(listner.target.id.length > 0) {
+
+                }
+                if(listner.target.classList.length > 0) {
+                    
+                }
+
+                console.log('document.activeElement', document.querySelector(":focus"))
+
+            }
+        })
+    })
+
+    console.log('tii', tii)
+
+}
