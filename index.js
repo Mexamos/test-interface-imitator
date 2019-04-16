@@ -398,30 +398,36 @@ class TestInterfaceImitator {
         }.bind(this))
     }
 
+    filterListners(all_listners) {
+        let init_include_selectors = ''
+        this.allEventListners = all_listners.filter(function(listner, index) {
+            let exist_inner_element = this.inner_element_listners.includes(listner.target)
+            if(!exist_inner_element) {
+                init_include_selectors += index === 0 ? this.getAllSelectorsOfListner(listner) : `, ${this.getAllSelectorsOfListner(listner)}`
+                return true
+            }
+            else false
+        }.bind(this))
+        this._include_elements = init_include_selectors
+    }
+
 }
 
-window.onload = function() {
+// window.onload = function() {
 
     let tii = new TestInterfaceImitator()
     tii.init()
     tii.addListners()
-    let init_include_selectors = ''
-    tii.allEventListners = window.getAllEventListeners().filter(function(listner, index) {
-        let exist_inner_element = tii.inner_element_listners.includes(listner.target)
-        if(!exist_inner_element) {
-            init_include_selectors += index === 0 ? tii.getAllSelectorsOfListner(listner) : `, ${tii.getAllSelectorsOfListner(listner)}`
-            return true
-        }
-        else false
-    })
-    tii._include_elements = init_include_selectors
-
+    tii.filterListners(window.getAllEventListeners())
     tii.addContextmenuListners()
 
-    console.log('tii', tii)
+//     console.log('tii', tii)
 
-    // TODO
-    // events that block another event
-    // get events from ifames
+//     // TODO
+//     // events that block another event
+//     // get events from ifames
+//     // block all <a>
 
-}
+// }
+
+export default tii
