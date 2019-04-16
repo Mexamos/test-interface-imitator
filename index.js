@@ -2,23 +2,41 @@ class TestInterfaceImitator {
 
     constructor() {
         this.include_elements = ''
-        this.exclude_elements = {
-            val: '',
-            get val() {
-                return this.val
-            },
-            set val(newVal) {
-                console.log('newVal', newVal)
-                this.val = newVal
-            }
-        }
-
+        this.exclude_elements = ''
         this.exclude_blocks = ''
         this.interval_timer = null
         this.interval = 0
         this.total_duration = 0
         this.inner_element_listners = [],
-        this.actually_input = null
+        this.actually_target = ''
+    }
+
+    set _include_elements(newVal) {
+        this.include_input.value = this.include_elements = newVal
+    }
+    get _include_elements() {
+        return this.include_elements
+    }
+
+    set _exclude_elements(newVal) {
+        this.exclude_input.value = this.exclude_elements = newVal
+    }
+    get _exclude_elements() {
+        return this.exclude_elements
+    }
+
+    set _exclude_blocks(newVal) {
+        this.exclude_blocks_input.value = this.exclude_blocks = newVal
+    }
+    get _exclude_blocks() {
+        return this.exclude_blocks
+    }
+
+    set _interval(newVal) {
+        this.interval = newVal
+    }
+    set _total_duration(newVal) {
+        this.total_duration = newVal
     }
 
     init() {
@@ -108,7 +126,7 @@ class TestInterfaceImitator {
         this.interval_input.name = this.interval_input.id = 'tii-interval-input'
         this.interval_input.type = 'number'
         this.interval_input.step = '100'
-        this.interval_input.value = 1000
+        this._interval = this.interval_input.value = 1000
         interval_input_wrapper.appendChild(this.interval_input)
         this.inner_element_listners.push(this.interval_input)
         
@@ -129,7 +147,7 @@ class TestInterfaceImitator {
         this.total_duration_input.name = this.total_duration_input.id = 'tii-total-duration-input'
         this.total_duration_input.type = 'number'
         this.total_duration_input.step = '100'
-        this.total_duration_input.value = 10000
+        this._total_duration = this.total_duration_input.value = 10000
         total_duration_input_wrapper.appendChild(this.total_duration_input)
         this.inner_element_listners.push(this.total_duration_input)
 
@@ -171,21 +189,21 @@ class TestInterfaceImitator {
             this.include_elements = event.target.value
         }.bind(this))
         this.include_input.addEventListener('focus', function(event) {
-            this.actually_input = event.target
+            this.actually_target = 'include'
         }.bind(this))
 
         this.exclude_input.addEventListener('input', function(event) {
-            this.exclude_elements.set(event.target.value)
+            this.exclude_elements = event.target.value
         }.bind(this))
         this.exclude_input.addEventListener('focus', function(event) {
-            this.actually_input = event.target
+            this.actually_target = 'exclude'
         }.bind(this))
 
         this.exclude_blocks_input.addEventListener('input', function(event) {
             this.exclude_blocks = event.target.value
         }.bind(this))
         this.exclude_blocks_input.addEventListener('focus', function(event) {
-            this.actually_input = event.target
+            this.actually_target = 'exclude_blocks'
         }.bind(this))
 
         this.interval_input.addEventListener('input', function(event) {
@@ -202,7 +220,7 @@ class TestInterfaceImitator {
 
     initTest() {
         let includes = this.include_elements.split(',')
-        let excludes = this.exclude_elements.get().split(',')
+        let excludes = this.exclude_elements.split(',')
         let excludes_blocks = this.exclude_blocks.split(',')
         console.log('includes', includes)
         console.log('excludes', excludes)
@@ -274,45 +292,61 @@ class TestInterfaceImitator {
 
     }
 
-    addSelectors(input, listner) {
-        if(input.value.length === 0) {
-            if(listner.target.id.length > 0) {
-                input.value += `#${listner.target.id}`
+    getAllSelectorsOfListner(listner) {
+        var selector = ''
+        if(listner.target.id.length > 0) {
+            selector += `#${listner.target.id}`
+        }
+        if(listner.target.classList.length > 0) {
+            listner.target.classList.forEach(function(class_name) {
+                if(class_name !== 'tii-element-with-listner') {
+                    selector += `.${class_name}`
+                }
+            })
+        }
+        return selector
+    }
+
+    addSelectors(input_type, listner) {
+        let selector = this.getAllSelectorsOfListner(listner)
+
+        if(input_type === 'include') {
+            if(this._include_elements.length === 0) {
+                this._include_elements = selector
             }
-            else if(listner.target.classList.length > 0) {
-                listner.target.classList.forEach(function(class_name) {
-                    input.value += `.${class_name}`
-                })
+            else {
+                let regex = new RegExp(selector)
+                if(this._include_elements.match(regex)) return
+                this._include_elements = `${this._include_elements}, ${selector}`
             }
         }
-        else {
-            if(listner.target.id.length > 0) {
-                let rexex = new RegExp(listner.target.id)
-                if(input.value.match(rexex)) return
-
-                input.value += `, #${listner.target.id}`
+        else if(input_type === 'exclude') {
+            if(this._exclude_elements.length === 0) {
+                this._exclude_elements = selector
             }
-            else if(listner.target.classList.length > 0) {
-                listner.target.classList.forEach(function(class_name, index) {
-                    let rexex = new RegExp(class_name)
-                    if(input.value.match(rexex)) return
-
-                    if(index === 0) input.value += `, .${class_name}`
-                    else input.value += `.${class_name}`
-                })
+            else {
+                let regex = new RegExp(selector)
+                if(this._exclude_elements.match(regex)) return
+                this._exclude_elements = `${this._exclude_elements}, ${selector}`
+            }
+        }
+        else if(input_type === 'exclude_blocks') {
+            if(this._exclude_blocks.length === 0) {
+                this._exclude_blocks = selector
+            }
+            else {
+                let regex = new RegExp(selector)
+                if(this._exclude_blocks.match(regex)) return
+                this._exclude_blocks = `${this._exclude_blocks}, ${selector}`
             }
         }
     }
 
     getSelectorByContextMenuAndCtrl(listner, event) {
-
         event.preventDefault()
-
-        if(event.ctrlKey && this.actually_input) {
+        if(event.ctrlKey && this.actually_target) {
             event.stopPropagation()
-
-            this.addSelectors(this.actually_input, listner)
-
+            this.addSelectors(this.actually_target, listner)
         }
     }
 
@@ -323,14 +357,16 @@ window.onload = function() {
     let tii = new TestInterfaceImitator()
     tii.init()
     tii.addListners()
-    tii.allEventListners = window.getAllEventListeners().filter(function(listner) {
+    let init_include_selectors = ''
+    tii.allEventListners = window.getAllEventListeners().filter(function(listner, index) {
         let exist_inner_element = tii.inner_element_listners.includes(listner.target)
         if(!exist_inner_element) {
-            tii.addSelectors(tii.include_input, listner)
+            init_include_selectors += index === 0 ? tii.getAllSelectorsOfListner(listner) : `, ${tii.getAllSelectorsOfListner(listner)}`
             return true
         }
         else false
     })
+    tii._include_elements = init_include_selectors
 
     tii.allEventListners.forEach(function(listner) {
         listner.target.classList.add('tii-element-with-listner')

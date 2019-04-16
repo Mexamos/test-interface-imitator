@@ -5,11 +5,16 @@
     top: 30px;
     padding: 10px;
     border-radius: 1px;
-    background: linear-gradient(45deg, #0d0d0d, 30%, #484848);
+    background: linear-gradient(45deg, rgb(13, 13, 13), 30%, rgb(72, 72, 72));
     box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.5);
     font-family: sans-serif;
     font-size: 14px;
-    color: aliceblue;
+    color: rgb(240, 248, 255);
+    opacity: 0.6;
+    transition: opacity .5s;
+}
+#test-interface-imitator-wrapeer:hover {
+    opacity: 1;
 }
 #test-interface-imitator-wrapeer label {
     display: block;
