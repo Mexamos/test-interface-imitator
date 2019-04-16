@@ -7,7 +7,7 @@ class TestInterfaceImitator {
         this.interval_timer = null
         this.interval = 0
         this.total_duration = 0
-        this.inner_element_listners = [],
+        this.inner_element_listners = []
         this.actually_target = ''
     }
 
@@ -48,6 +48,17 @@ class TestInterfaceImitator {
         this.plugin_wrapper.classList.add('tii-right-position')
         body.appendChild(this.plugin_wrapper)
 
+        let img_expand = document.createElement('img')
+        img_expand.src = './images/expand.png'
+        img_expand.id = 'tii-img-expand'
+        this.expand = document.createElement('div')
+        this.expand.classList.add('tii-expand')
+        this.expand.classList.add('display-none')
+        this.expand.title = 'Expand plugin'
+        this.expand.appendChild(img_expand)
+        body.appendChild(this.expand)
+        this.inner_element_listners.push(this.expand)
+
         // create header
         let img_toggle_position = document.createElement('img')
         img_toggle_position.src = './images/scroll-vertical-arrows.png'
@@ -57,10 +68,20 @@ class TestInterfaceImitator {
         this.image_toggle_position_wrapper.appendChild(img_toggle_position)
         this.inner_element_listners.push(this.image_toggle_position_wrapper)
 
+        let roll_up = document.createElement('img')
+        roll_up.src = './images/roll-up.png'
+        roll_up.id = 'tii-roll-up'
+        this.roll_up_wrapper = document.createElement('div')
+        this.roll_up_wrapper.classList.add('tii-roll-up-wrapper')
+        this.roll_up_wrapper.title = 'Roll up plugin'
+        this.roll_up_wrapper.appendChild(roll_up)
+        this.inner_element_listners.push(this.roll_up_wrapper)
+
         let header_wrapper = document.createElement('div')
         header_wrapper.classList.add('tii-header')
         this.plugin_wrapper.appendChild(header_wrapper)
         header_wrapper.appendChild(this.image_toggle_position_wrapper)
+        header_wrapper.appendChild(this.roll_up_wrapper)
 
         // create body
         let body_wrapper = document.createElement('div')
@@ -216,6 +237,18 @@ class TestInterfaceImitator {
 
         this.button_start.addEventListener('click', this.initTest.bind(this))
 
+        this.roll_up_wrapper.addEventListener('click', function() {
+            this.removeContextmenuListners()
+            this.plugin_wrapper.classList.add('display-none')
+            this.expand.classList.remove('display-none')
+        }.bind(this))
+
+        this.expand.addEventListener('click', function() {
+            this.addContextmenuListners()
+            this.plugin_wrapper.classList.remove('display-none')
+            this.expand.classList.add('display-none')
+        }.bind(this))
+
     }
 
     initTest() {
@@ -350,6 +383,21 @@ class TestInterfaceImitator {
         }
     }
 
+    addContextmenuListners() {
+        this.allEventListners.forEach(function(listner) {
+            listner.target.classList.add('tii-element-with-listner')
+            listner.target.addEventListener('contextmenu', this.getSelectorByContextMenuAndCtrl.bind(this, listner), true)
+        }.bind(this))
+    }
+
+    removeContextmenuListners() {
+        this.allEventListners.forEach(function(listner) {
+            listner.target.classList.remove('tii-element-with-listner')
+            listner.target.removeEventListener('contextmenu', this.getSelectorByContextMenuAndCtrl.bind(this, listner), true)
+            console.log('listner.target', listner.target)
+        }.bind(this))
+    }
+
 }
 
 window.onload = function() {
@@ -368,10 +416,7 @@ window.onload = function() {
     })
     tii._include_elements = init_include_selectors
 
-    tii.allEventListners.forEach(function(listner) {
-        listner.target.classList.add('tii-element-with-listner')
-        listner.target.addEventListener('contextmenu', tii.getSelectorByContextMenuAndCtrl.bind(tii, listner))
-    })
+    tii.addContextmenuListners()
 
     console.log('tii', tii)
 

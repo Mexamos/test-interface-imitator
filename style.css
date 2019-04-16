@@ -26,11 +26,32 @@
     right: 30px;
 }
 
+.tii-expand {
+    position: fixed;
+    top: 40px;
+    right: 0px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    border-radius: 1px;
+    cursor: pointer;
+    border: 1px solid #a1a1a1;
+    border-right: unset;
+}
+#tii-img-expand {
+    width: 15px;
+    padding: 2.5px;
+}
+.display-none {
+    display: none;
+}
 
 .tii-header {
     display: flex;
 }
-.tii-img-toggle-position-wrapper {
+.tii-img-toggle-position-wrapper, .tii-roll-up-wrapper {
     background: white;
     display: flex;
     align-items: center;
@@ -47,7 +68,16 @@
     width: 20px;
     height: 20px;
 }
-
+#tii-roll-up {
+    width: 15px;
+    height: 12px;
+}
+.tii-roll-up-wrapper {
+    position: absolute;
+    right: 10px;
+    padding: 4px;
+    width: 15px;
+}
 
 
 
