@@ -255,9 +255,6 @@ class TestInterfaceImitator {
         let includes = this.include_elements.split(',')
         let excludes = this.exclude_elements.split(',')
         let excludes_blocks = this.exclude_blocks.split(',')
-        console.log('includes', includes)
-        console.log('excludes', excludes)
-        console.log('excludes_blocks', excludes_blocks)
 
         this.selected_listners = this.allEventListners.filter(function(listner) {
 
@@ -307,6 +304,7 @@ class TestInterfaceImitator {
 
         if(this.selected_listners.length > 0 && this.interval > 0) {
 
+            this.not_called_listners = this.selected_listners.map(a => ({...a}))
             clearInterval(this.interval_timer)
             this.interval_timer = null
             this.interval_timer = setInterval(this.randomCallListners.bind(this), this.interval)
@@ -320,9 +318,12 @@ class TestInterfaceImitator {
     }
 
     randomCallListners() {
-
-        this.selected_listners[0].handler(this.selected_listners[0].target)
-
+        if(this.not_called_listners.length === 0) {
+            this.not_called_listners = this.selected_listners.map(a => ({...a}))
+        }
+        let random_number = Math.floor(Math.random()*this.not_called_listners.length)
+        this.not_called_listners[random_number].handler(this.not_called_listners[random_number].target)
+        this.not_called_listners.splice(random_number, 1)
     }
 
     getAllSelectorsOfListner(listner) {
@@ -394,7 +395,6 @@ class TestInterfaceImitator {
         this.allEventListners.forEach(function(listner) {
             listner.target.classList.remove('tii-element-with-listner')
             listner.target.removeEventListener('contextmenu', this.getSelectorByContextMenuAndCtrl.bind(this, listner), true)
-            console.log('listner.target', listner.target)
         }.bind(this))
     }
 
@@ -419,5 +419,9 @@ window.onload = function() {
     tii.addContextmenuListners()
 
     console.log('tii', tii)
+
+    // TODO
+    // events that block another event
+    // get events from ifames
 
 }
