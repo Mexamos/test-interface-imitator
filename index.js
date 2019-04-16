@@ -2,7 +2,17 @@ class TestInterfaceImitator {
 
     constructor() {
         this.include_elements = ''
-        this.exclude_elements = ''
+        this.exclude_elements = {
+            val: '',
+            get val() {
+                return this.val
+            },
+            set val(newVal) {
+                console.log('newVal', newVal)
+                this.val = newVal
+            }
+        }
+
         this.exclude_blocks = ''
         this.interval_timer = null
         this.interval = 0
@@ -98,6 +108,7 @@ class TestInterfaceImitator {
         this.interval_input.name = this.interval_input.id = 'tii-interval-input'
         this.interval_input.type = 'number'
         this.interval_input.step = '100'
+        this.interval_input.value = 1000
         interval_input_wrapper.appendChild(this.interval_input)
         this.inner_element_listners.push(this.interval_input)
         
@@ -118,6 +129,7 @@ class TestInterfaceImitator {
         this.total_duration_input.name = this.total_duration_input.id = 'tii-total-duration-input'
         this.total_duration_input.type = 'number'
         this.total_duration_input.step = '100'
+        this.total_duration_input.value = 10000
         total_duration_input_wrapper.appendChild(this.total_duration_input)
         this.inner_element_listners.push(this.total_duration_input)
 
@@ -159,12 +171,11 @@ class TestInterfaceImitator {
             this.include_elements = event.target.value
         }.bind(this))
         this.include_input.addEventListener('focus', function(event) {
-            console.log(event.target)
             this.actually_input = event.target
         }.bind(this))
 
         this.exclude_input.addEventListener('input', function(event) {
-            this.exclude_elements = event.target.value
+            this.exclude_elements.set(event.target.value)
         }.bind(this))
         this.exclude_input.addEventListener('focus', function(event) {
             this.actually_input = event.target
@@ -191,8 +202,11 @@ class TestInterfaceImitator {
 
     initTest() {
         let includes = this.include_elements.split(',')
-        let excludes = this.exclude_elements.split(',')
+        let excludes = this.exclude_elements.get().split(',')
         let excludes_blocks = this.exclude_blocks.split(',')
+        console.log('includes', includes)
+        console.log('excludes', excludes)
+        console.log('excludes_blocks', excludes_blocks)
 
         this.selected_listners = this.allEventListners.filter(function(listner) {
 
@@ -260,6 +274,48 @@ class TestInterfaceImitator {
 
     }
 
+    addSelectors(input, listner) {
+        if(input.value.length === 0) {
+            if(listner.target.id.length > 0) {
+                input.value += `#${listner.target.id}`
+            }
+            else if(listner.target.classList.length > 0) {
+                listner.target.classList.forEach(function(class_name) {
+                    input.value += `.${class_name}`
+                })
+            }
+        }
+        else {
+            if(listner.target.id.length > 0) {
+                let rexex = new RegExp(listner.target.id)
+                if(input.value.match(rexex)) return
+
+                input.value += `, #${listner.target.id}`
+            }
+            else if(listner.target.classList.length > 0) {
+                listner.target.classList.forEach(function(class_name, index) {
+                    let rexex = new RegExp(class_name)
+                    if(input.value.match(rexex)) return
+
+                    if(index === 0) input.value += `, .${class_name}`
+                    else input.value += `.${class_name}`
+                })
+            }
+        }
+    }
+
+    getSelectorByContextMenuAndCtrl(listner, event) {
+
+        event.preventDefault()
+
+        if(event.ctrlKey && this.actually_input) {
+            event.stopPropagation()
+
+            this.addSelectors(this.actually_input, listner)
+
+        }
+    }
+
 }
 
 window.onload = function() {
@@ -270,31 +326,7 @@ window.onload = function() {
     tii.allEventListners = window.getAllEventListeners().filter(function(listner) {
         let exist_inner_element = tii.inner_element_listners.includes(listner.target)
         if(!exist_inner_element) {
-
-            console.log('tii.include_input.value', tii.include_input.value)
-
-            if(tii.include_input.value.length === 0) {
-                if(listner.target.id.length > 0) {
-                    tii.include_input.value += `#${listner.target.id}`
-                }
-                else if(listner.target.classList.length > 0) {
-                    listner.target.classList.forEach(function(class_name) {
-                        tii.include_input.value += `.${class_name}`
-                    })
-                }
-            }
-            else {
-                if(listner.target.id.length > 0) {
-                    tii.include_input.value += `, #${listner.target.id}`
-                }
-                else if(listner.target.classList.length > 0) {
-                    listner.target.classList.forEach(function(class_name, index) {
-                        if(index === 0) tii.include_input.value += `, .${class_name}`
-                        else tii.include_input.value += `.${class_name}`
-                    })
-                }
-            }
-
+            tii.addSelectors(tii.include_input, listner)
             return true
         }
         else false
@@ -302,27 +334,7 @@ window.onload = function() {
 
     tii.allEventListners.forEach(function(listner) {
         listner.target.classList.add('tii-element-with-listner')
-        listner.target.addEventListener('contextmenu', function(event) {
-            event.preventDefault()
-            console.log('event', event)
-            if(event.ctrlKey && tii.actually_input) {
-                event.stopPropagation()
-                // console.log(tii.include_input.focus())
-                console.log('this.actually_input', tii.actually_input.value)
-
-                console.log('listner', listner.target.classList)
-
-                if(listner.target.id.length > 0) {
-
-                }
-                if(listner.target.classList.length > 0) {
-                    
-                }
-
-                console.log('document.activeElement', document.querySelector(":focus"))
-
-            }
-        })
+        listner.target.addEventListener('contextmenu', tii.getSelectorByContextMenuAndCtrl.bind(tii, listner))
     })
 
     console.log('tii', tii)
