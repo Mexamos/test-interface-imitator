@@ -2,11 +2,10 @@ import './style.css'
 import '@ulivz/get-event-listeners'
 import TestInterfaceImitator from './tii'
 
-function addTestTemplate(callback) {
+function addTestTemplate() {
     var compile = require("./test.html")
     var template = compile()
     document.body.innerHTML = template
-
 
     let test_div = document.querySelector('.test-square')
     test_div.addEventListener('click', function(){
@@ -17,8 +16,6 @@ function addTestTemplate(callback) {
     test_button.addEventListener('dbclick', function(){
         alert('button')
     })
-
-    callback()
 }
 
 function initOnloadWindow() {
@@ -30,12 +27,16 @@ function initOnloadWindow() {
 
     console.log('tii', tii)
 
-//     // TODO
-//     // events that block another event
-//     // get events from ifames
-//     // block all <a>
+    // TODO
+    // events that block another event
+    // get events from ifames
+    // block all <a>
 }
 
-console.log()
 
-addTestTemplate(initOnloadWindow)
+if(ENV === 'dev') {
+    addTestTemplate()
+    initOnloadWindow()
+}
+window.initOnloadWindow = initOnloadWindow
+export default initOnloadWindow
