@@ -1,4 +1,8 @@
-class TestInterfaceImitator {
+import ImageExpand from './images/expand.png'
+import ImageScrollVerticalArrows from './images/scroll-vertical-arrows.png'
+import ImageRollUp from './images/roll-up.png'
+
+export default class TestInterfaceImitator {
 
     constructor() {
         this.include_elements = ''
@@ -49,7 +53,7 @@ class TestInterfaceImitator {
         body.appendChild(this.plugin_wrapper)
 
         let img_expand = document.createElement('img')
-        img_expand.src = './images/expand.png'
+        img_expand.src = ImageExpand
         img_expand.id = 'tii-img-expand'
         this.expand = document.createElement('div')
         this.expand.classList.add('tii-expand')
@@ -61,7 +65,7 @@ class TestInterfaceImitator {
 
         // create header
         let img_toggle_position = document.createElement('img')
-        img_toggle_position.src = './images/scroll-vertical-arrows.png'
+        img_toggle_position.src = ImageScrollVerticalArrows
         img_toggle_position.id = 'tii-img-toggle-position'
         this.image_toggle_position_wrapper = document.createElement('div')
         this.image_toggle_position_wrapper.classList.add('tii-img-toggle-position-wrapper')
@@ -69,7 +73,7 @@ class TestInterfaceImitator {
         this.inner_element_listners.push(this.image_toggle_position_wrapper)
 
         let roll_up = document.createElement('img')
-        roll_up.src = './images/roll-up.png'
+        roll_up.src = ImageRollUp
         roll_up.id = 'tii-roll-up'
         this.roll_up_wrapper = document.createElement('div')
         this.roll_up_wrapper.classList.add('tii-roll-up-wrapper')
@@ -187,11 +191,6 @@ class TestInterfaceImitator {
         button_wrapper.appendChild(this.button_start)
         this.inner_element_listners.push(this.button_start)
 
-        let style_tag = document.createElement('link')
-        style_tag.href = 'style.css'
-        style_tag.rel = 'stylesheet'
-
-        head.appendChild(style_tag)
     }
 
     addListners() {
@@ -412,22 +411,3 @@ class TestInterfaceImitator {
     }
 
 }
-
-// window.onload = function() {
-
-    let tii = new TestInterfaceImitator()
-    tii.init()
-    tii.addListners()
-    tii.filterListners(window.getAllEventListeners())
-    tii.addContextmenuListners()
-
-//     console.log('tii', tii)
-
-//     // TODO
-//     // events that block another event
-//     // get events from ifames
-//     // block all <a>
-
-// }
-
-export default tii
