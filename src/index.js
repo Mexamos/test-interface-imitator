@@ -2,21 +2,21 @@ import './style.css'
 import '@ulivz/get-event-listeners'
 import TestInterfaceImitator from './tii'
 
-function addTestTemplate() {
-    var compile = require("./test.html")
-    var template = compile()
-    document.body.innerHTML = template
+// function addTestTemplate() {
+//     var compile = require("./test.html")
+//     var template = compile()
+//     document.body.innerHTML = template
 
-    let test_div = document.querySelector('.test-square')
-    test_div.addEventListener('click', function(){
-        console.log('wrapper')
-    })
+//     let test_div = document.querySelector('.test-square')
+//     test_div.addEventListener('click', function(){
+//         console.log('wrapper')
+//     })
 
-    let test_button = document.querySelector('.test-square button')
-    test_button.addEventListener('dbclick', function(){
-        alert('button')
-    })
-}
+//     let test_button = document.querySelector('.test-square button')
+//     test_button.addEventListener('dbclick', function(){
+//         alert('button')
+//     })
+// }
 
 function initOnloadWindow() {
     let tii = new TestInterfaceImitator()
@@ -34,9 +34,9 @@ function initOnloadWindow() {
 }
 
 
-if(ENV === 'dev') {
-    addTestTemplate()
-    initOnloadWindow()
-}
-window.initOnloadWindow = initOnloadWindow
+// if(ENV === 'dev') {
+//     addTestTemplate()
+//     initOnloadWindow()
+// }
+
 export default initOnloadWindow

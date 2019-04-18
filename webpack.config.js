@@ -5,13 +5,16 @@ const webpack = require('webpack')
 
 module.exports = env => {
   return {
-    mode: 'development',
+    mode: 'none',
     entry: {
       app: './src'
     },
     output: {
       filename: 'index_bundle.js',
-      path: path.resolve(__dirname, 'dist')
+      path: path.resolve(__dirname, 'dist'),
+      library: 'initOnloadWindow',
+      libraryTarget: 'umd',
+      libraryExport: 'default'
     },
     plugins: [
       new CleanWebpackPlugin(),
@@ -34,14 +37,24 @@ module.exports = env => {
                   limit: 10000
               } 
           }]
-      },
+        },
         {
           test: /\.(html)$/,
           use: {
             loader: "underscore-template-loader"
           }
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader"
+          }
         }
       ]
     },
+    optimization: {
+      minimize: false
+    }
   }
 };
