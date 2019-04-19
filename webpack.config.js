@@ -5,9 +5,9 @@ const webpack = require('webpack')
 
 module.exports = env => {
   return {
-    mode: 'none',
+    mode: 'development',
     entry: {
-      app: './src'
+      app: './src/test.js'
     },
     output: {
       filename: 'index_bundle.js',

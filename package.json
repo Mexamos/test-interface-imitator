@@ -1,11 +1,11 @@
 {
   "name": "test-interface-imitator",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Light Application for test using web-pages interface",
   "main": "./dist/main.js",
   "scripts": {
-    "build": "webpack --env=prod --mode production ./src/index.js --output ./dist/main.js",
-    "dev": "webpack-dev-server --env=dev --open"
+    "build": "webpack --mode production ./src/index.js --output ./dist/main.js",
+    "dev": "webpack-dev-server --open"
   },
   "repository": {
     "type": "git",

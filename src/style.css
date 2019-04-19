@@ -1,6 +1,6 @@
 #test-interface-imitator-wrapeer {
-    width: 280px;
-    height: 260px;
+    min-width: 315px;
+    min-height: 290px;
     position: fixed;
     top: 30px;
     padding: 10px;
@@ -12,7 +12,7 @@
     color: rgb(240, 248, 255);
     opacity: 0.6;
     transition: opacity .5s;
-    z-index: 9999;
+    z-index: 999999999;
 }
 #test-interface-imitator-wrapeer:hover {
     opacity: 1;
@@ -29,21 +29,25 @@
 
 .tii-expand {
     position: fixed;
-    top: 40px;
+    top: 30px;
     right: 0px;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    border-radius: 1px;
+    width: 35px;
+    height: 35px;
+    border-radius: 2px;
     cursor: pointer;
-    border: 1px solid #a1a1a1;
+    border: 1.5px solid #a1a1a1;
     border-right: unset;
+    z-index: 999999999;
 }
 #tii-img-expand {
-    width: 15px;
-    padding: 2.5px;
+    width: 20px;
+    border: 1px solid #a1a1a1;
+    background: #a1a1a1;
+    padding: 3px;
 }
 .display-none {
     display: none;
@@ -77,7 +81,7 @@
     position: absolute;
     right: 10px;
     padding: 4px;
-    width: 15px;
+    width: 20px;
 }
 
 
@@ -87,14 +91,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    height: 200px;
+    min-height: 220px;
 }
 
 .tii-body-wrapper input {
     width: 250px;
     color: rgb(13, 13, 13);
 }
-
+.tii-body-wrapper textarea {
+    min-width: 250px;
+    color: rgb(13, 13, 13);
+}
 .tii-body-wrapper > div:not(.tii-timers-wrapper) label {
     text-align: center;
 }
@@ -130,7 +137,10 @@
 .tii-button-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 20px;
+}
+.tii-button {
+    color: rgb(13, 13, 13);
 }
 
 .tii-element-with-listner:hover {

@@ -100,7 +100,7 @@ export default class TestInterfaceImitator {
         include_label.for = 'tii-include-elements'
         include_label.innerHTML = 'Include elements'
         include_input_wrapper.appendChild(include_label)
-        this.include_input = document.createElement('input')
+        this.include_input = document.createElement('textarea')
         this.include_input.name = this.include_input.id = 'tii-include-elements'
         this.include_input.placeholder = 'Enter selectors'
         include_input_wrapper.appendChild(this.include_input)
