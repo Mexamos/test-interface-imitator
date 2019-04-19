@@ -401,7 +401,7 @@ export default class TestInterfaceImitator {
         let init_include_selectors = ''
         this.allEventListners = all_listners.filter(function(listner, index) {
             let exist_inner_element = this.inner_element_listners.includes(listner.target)
-            if(!exist_inner_element) {
+            if(!exist_inner_element && listner.target.nodeName !== '#document' && listner.target.nodeName !== 'A') {
                 init_include_selectors += index === 0 ? this.getAllSelectorsOfListner(listner) : `, ${this.getAllSelectorsOfListner(listner)}`
                 return true
             }

@@ -12,6 +12,7 @@
     color: rgb(240, 248, 255);
     opacity: 0.6;
     transition: opacity .5s;
+    z-index: 9999;
 }
 #test-interface-imitator-wrapeer:hover {
     opacity: 1;
@@ -91,6 +92,7 @@
 
 .tii-body-wrapper input {
     width: 250px;
+    color: rgb(13, 13, 13);
 }
 
 .tii-body-wrapper > div:not(.tii-timers-wrapper) label {
