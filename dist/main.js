@@ -1227,9 +1227,10 @@ function () {
       var init_include_selectors = '';
       this.allEventListners = all_listners.filter(function (listner, index) {
         var exist_inner_element = this.inner_element_listners.includes(listner.target);
+        var selector = this.getAllSelectorsOfListner(listner);
 
-        if (!exist_inner_element && listner.target.nodeName !== '#document' && listner.target.nodeName !== 'A') {
-          init_include_selectors += index === 0 ? this.getAllSelectorsOfListner(listner) : ", ".concat(this.getAllSelectorsOfListner(listner));
+        if (!exist_inner_element && listner.target.nodeName !== '#document' && listner.target.nodeName !== 'A' && selector.length > 0) {
+          init_include_selectors += index === 0 ? selector : ", ".concat(selector);
           return true;
         } else false;
       }.bind(this));
