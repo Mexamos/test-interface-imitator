@@ -10,12 +10,7 @@
     font-family: sans-serif;
     font-size: 14px;
     color: rgb(240, 248, 255);
-    opacity: 0.6;
-    transition: opacity .5s;
     z-index: 999999999;
-}
-#test-interface-imitator-wrapeer:hover {
-    opacity: 1;
 }
 #test-interface-imitator-wrapeer label {
     display: block;
@@ -43,11 +38,19 @@
     border-right: unset;
     z-index: 999999999;
 }
+.tii-expand:hover { 
+    border: 1.5px solid black;
+    border-right: unset;
+}
 #tii-img-expand {
     width: 20px;
     border: 1px solid #a1a1a1;
     background: #a1a1a1;
     padding: 3px;
+}
+.tii-expand:hover #tii-img-expand {
+    border: 1px solid black;
+    background: black;
 }
 .display-none {
     display: none;
@@ -85,7 +88,6 @@
 }
 
 
-
 .tii-body-wrapper {
     display: flex;
     flex-direction: column;
@@ -113,16 +115,9 @@
     width: 100%;
     padding: 0 15px;
 }
-.tii-interval-input-wrapper {
-
-}
 .tii-interval-input-wrapper input {
     width: 60px;
     float: left;
-}
-
-.tii-total-duration-input-wrapper {
-
 }
 .tii-total-duration-input-wrapper input {
     width: 60px;

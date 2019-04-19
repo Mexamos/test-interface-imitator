@@ -1,6 +1,6 @@
 {
   "name": "test-interface-imitator",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Light Application for test using web-pages interface",
   "main": "./dist/main.js",
   "scripts": {

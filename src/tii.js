@@ -330,7 +330,7 @@ export default class TestInterfaceImitator {
         if(listner.target.id && listner.target.id.length > 0) {
             selector += `#${listner.target.id}`
         }
-        if(listner.target.classList && listner.target.classList.length > 0) {
+        if(listner.target.classList && listner.target.classList.length > 0 && listner.target.classList[0] !== 'tii-element-with-listner') {
             listner.target.classList.forEach(function(class_name) {
                 if(class_name !== 'tii-element-with-listner') {
                     selector += `.${class_name}`
