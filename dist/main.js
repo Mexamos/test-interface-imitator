@@ -1140,7 +1140,13 @@ function () {
       }
 
       var random_number = Math.floor(Math.random() * this.not_called_listners.length);
-      this.not_called_listners[random_number].handler(this.not_called_listners[random_number].target);
+
+      try {
+        this.not_called_listners[random_number].handler(this.not_called_listners[random_number].target);
+      } catch (error) {
+        console.log('error', error);
+      }
+
       this.not_called_listners.splice(random_number, 1);
     }
   }, {
